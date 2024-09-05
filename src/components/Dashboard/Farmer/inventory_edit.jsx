@@ -1,3 +1,224 @@
+// import React, { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import "./inventory.css";
+// import Swal from "sweetalert2";
+// import BASE_URL from "../../../Server/base_url";
+
+// const Inventory_edit = (props) => {
+//   let token = localStorage.getItem("token");
+//   const item = props.item;
+//   const [price, setPrice] = useState(item.price);
+//   const [addStock, setAddStock] = useState(0);
+
+//   const onAddStockChange = (e) => {
+//     setAddStock(e.target.value);
+//   };
+//   const onPriceChange = (e) => {
+//     setPrice(e.target.value);
+//   };
+
+//   const onChangePrice = (id) => {
+//     const Price = parseInt(price);
+//     if (Price <= 0 || Price > 1000000) {
+//       Swal.fire("Enter A Valid Price!");
+//     } else if (Price === item.price) {
+//       Swal.fire("Its a Same Price!");
+//     } else {
+//       Swal.fire({
+//         title: "Change This Price?",
+//         icon: "info",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3bb77e",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Yes",
+//         cancelButtonText: "No",
+//       }).then((result) => {
+//         if (result.isConfirmed) {
+//           changePrice(id, Price);
+//         }
+//       });
+//     }
+//   };
+//   const changePrice = async (id, Price) => {
+//     try {
+//       const response = await fetch(`${BASE_URL}/api/inventory/changePrice`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "auth-token": token,
+//         },
+//         body: JSON.stringify({
+//           id: id,
+//           price: Price,
+//         }),
+//       });
+//       const json = await response.json();
+//       if (json.success) {
+//         props.getItems();
+//         Swal.fire({
+//           icon: "success",
+//           title: "Change Price Successfully",
+//           showConfirmButton: false,
+//           timer: 1500,
+//         });
+//       }
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   };
+
+//   const onAddStock = (id) => {
+//     const stock = parseInt(addStock);
+//     if (stock <= 0 || stock > 1000) {
+//       Swal.fire("Enter A Valid stock!");
+//     } else {
+//       Swal.fire({
+//         title: "Add This Amount Of Stock?",
+//         icon: "info",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3bb77e",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Yes",
+//         cancelButtonText: "No",
+//       }).then((result) => {
+//         if (result.isConfirmed) {
+//           AddStock(id, stock);
+//         }
+//       });
+//     }
+//   };
+//   const AddStock = async (id, stock) => {
+//     try {
+//       const response = await fetch(`${BASE_URL}/api/inventory/addStock`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "auth-token": token,
+//         },
+//         body: JSON.stringify({
+//           id: id,
+//           quantity: stock,
+//         }),
+//       });
+//       const json = await response.json();
+//       if (json.success) {
+//         props.getItems();
+//         Swal.fire({
+//           icon: "success",
+//           title: "Stock Added Successfully",
+//           showConfirmButton: false,
+//           timer: 1500,
+//         });
+//       }
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   };
+
+//   const onRemoveStock = (id) => {
+//     const stock = parseInt(addStock);
+//     if (stock <= 0 || stock > item.CurQuantity || stock > 1000) {
+//       Swal.fire("Enter A Valid stock!");
+//     } else {
+//       Swal.fire({
+//         title: "Remove This Amount Of Stock?",
+//         icon: "info",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3bb77e",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Yes",
+//         cancelButtonText: "No",
+//       }).then((result) => {
+//         if (result.isConfirmed) {
+//           RemoveStock(id, stock);
+//         }
+//       });
+//     }
+//   };
+//   const RemoveStock = async (id, stock) => {
+//     try {
+//       const response = await fetch(`${BASE_URL}/api/inventory/removeStock`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "auth-token": token,
+//         },
+//         body: JSON.stringify({
+//           id: id,
+//           quantity: stock,
+//         }),
+//       });
+//       const json = await response.json();
+//       if (json.success) {
+//         props.getItems();
+//         Swal.fire({
+//           icon: "success",
+//           title: "Stock Remove Successfully",
+//           showConfirmButton: false,
+//           timer: 1500,
+//         });
+//       }
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   };
+//   return (
+//     <td width="21%" align="center">
+//       <div class="input-group mb-1">
+//         <input
+//           type="text"
+//           class="form-control"
+//           placeholder="RS"
+//           aria-label="Recipient's username"
+//           aria-describedby="button-addon2"
+//           onChange={onPriceChange}
+//         />
+
+//         <button
+//           type="button"
+//           class="btn btn-success "
+//           className=" md: "
+//           onClick={() => {
+//             onChangePrice(item._id);
+//           }}
+//         >
+//           Set Price
+//         </button>
+//       </div>
+//       <div class="input-group mb-1">
+//         <input
+//           type="text"
+//           class="form-control"
+//           placeholder="KG"
+//           aria-label="Recipient's username"
+//           aria-describedby="button-addon2"
+//           onChange={onAddStockChange}
+//         />
+//         <button
+//           type="button"
+//           class="btn btn-success "
+//           onClick={() => {
+//             onAddStock(item._id);
+//           }}
+//         >
+//           &nbsp;<i class="fa-solid fa-plus"></i>&nbsp;
+//         </button>
+//         <button
+//           type="button"
+//           class="btn btn-danger"
+//           onClick={() => {
+//             onRemoveStock(item._id);
+//           }}
+//         >
+//           &nbsp;<i class="fa-solid fa-minus"></i>&nbsp;
+//         </button>
+//       </div>
+//     </td>
+//   );
+// };
+
+// export default Inventory_edit;
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./inventory.css";
@@ -22,7 +243,7 @@ const Inventory_edit = (props) => {
     if (Price <= 0 || Price > 1000000) {
       Swal.fire("Enter A Valid Price!");
     } else if (Price === item.price) {
-      Swal.fire("Its a Same Price!");
+      Swal.fire("It's the Same Price!");
     } else {
       Swal.fire({
         title: "Change This Price?",
@@ -39,6 +260,7 @@ const Inventory_edit = (props) => {
       });
     }
   };
+
   const changePrice = async (id, Price) => {
     try {
       const response = await fetch(`${BASE_URL}/api/inventory/changePrice`, {
@@ -57,7 +279,7 @@ const Inventory_edit = (props) => {
         props.getItems();
         Swal.fire({
           icon: "success",
-          title: "Change Price Successfully",
+          title: "Price Changed Successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -70,7 +292,7 @@ const Inventory_edit = (props) => {
   const onAddStock = (id) => {
     const stock = parseInt(addStock);
     if (stock <= 0 || stock > 1000) {
-      Swal.fire("Enter A Valid stock!");
+      Swal.fire("Enter A Valid Stock!");
     } else {
       Swal.fire({
         title: "Add This Amount Of Stock?",
@@ -87,6 +309,7 @@ const Inventory_edit = (props) => {
       });
     }
   };
+
   const AddStock = async (id, stock) => {
     try {
       const response = await fetch(`${BASE_URL}/api/inventory/addStock`, {
@@ -118,7 +341,7 @@ const Inventory_edit = (props) => {
   const onRemoveStock = (id) => {
     const stock = parseInt(addStock);
     if (stock <= 0 || stock > item.CurQuantity || stock > 1000) {
-      Swal.fire("Enter A Valid stock!");
+      Swal.fire("Enter A Valid Stock!");
     } else {
       Swal.fire({
         title: "Remove This Amount Of Stock?",
@@ -135,6 +358,7 @@ const Inventory_edit = (props) => {
       });
     }
   };
+
   const RemoveStock = async (id, stock) => {
     try {
       const response = await fetch(`${BASE_URL}/api/inventory/removeStock`, {
@@ -153,7 +377,7 @@ const Inventory_edit = (props) => {
         props.getItems();
         Swal.fire({
           icon: "success",
-          title: "Stock Remove Successfully",
+          title: "Stock Removed Successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -162,12 +386,13 @@ const Inventory_edit = (props) => {
       console.log(error.message);
     }
   };
+
   return (
     <td width="21%" align="center">
-      <div class="input-group mb-1">
+      <div className="input-group mb-1">
         <input
           type="text"
-          class="form-control"
+          className="form-control w-5"
           placeholder="RS"
           aria-label="Recipient's username"
           aria-describedby="button-addon2"
@@ -176,19 +401,16 @@ const Inventory_edit = (props) => {
 
         <button
           type="button"
-          class="btn btn-success "
-          className=" md: "
-          onClick={() => {
-            onChangePrice(item._id);
-          }}
+          className="btn btn-success ml-10"
+          onClick={() => onChangePrice(item._id)}
         >
           Set Price
         </button>
       </div>
-      <div class="input-group mb-1">
+      <div className="input-group mb-1 mt-2">
         <input
           type="text"
-          class="form-control"
+          className="form-control"
           placeholder="KG"
           aria-label="Recipient's username"
           aria-describedby="button-addon2"
@@ -196,21 +418,17 @@ const Inventory_edit = (props) => {
         />
         <button
           type="button"
-          class="btn btn-success "
-          onClick={() => {
-            onAddStock(item._id);
-          }}
+          className="btn btn-success rounded-lg"
+          onClick={() => onAddStock(item._id)}
         >
-          &nbsp;<i class="fa-solid fa-plus"></i>&nbsp;
+          &nbsp;<i className="fa-solid fa-plus"></i>&nbsp;
         </button>
         <button
           type="button"
-          class="btn btn-danger"
-          onClick={() => {
-            onRemoveStock(item._id);
-          }}
+          className="btn btn-danger rounded-lg"
+          onClick={() => onRemoveStock(item._id)}
         >
-          &nbsp;<i class="fa-solid fa-minus"></i>&nbsp;
+          &nbsp;<i className="fa-solid fa-minus"></i>&nbsp;
         </button>
       </div>
     </td>

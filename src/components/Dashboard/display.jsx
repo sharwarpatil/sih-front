@@ -4,11 +4,12 @@ import {
   BsFillGrid3X3GapFill,
   BsPeopleFill,
   BsFillBellFill,
+  BsFillBarChartFill,
+  BsFillCartCheckFill,
 } from "react-icons/bs";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -20,50 +21,17 @@ import {
 } from "recharts";
 
 function Display() {
+  // Sample data for charts
   const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
+    { name: "Week 1", sales: 400, revenue: 2400 },
+    { name: "Week 2", sales: 300, revenue: 1398 },
+    { name: "Week 3", sales: 200, revenue: 9800 },
+    { name: "Week 4", sales: 278, revenue: 3908 },
   ];
+
+  // Sample data for statistics
+  const totalSales = 1178; // Replace with actual sales data
+  const totalRevenue = 17506; // Replace with actual revenue data
 
   return (
     <main className="main-container">
@@ -72,6 +40,7 @@ function Display() {
       </div>
 
       <div className="main-cards">
+        {/* Existing cards */}
         <div className="card">
           <div className="card-inner">
             <h3>PRODUCTS</h3>
@@ -100,55 +69,54 @@ function Display() {
           </div>
           <h1>42</h1>
         </div>
+
+        {/* New cards for sales data */}
+        <div className="card">
+          <div className="card-inner">
+            <h3>SALES THIS MONTH</h3>
+            <BsFillCartCheckFill className="card_icon" />
+          </div>
+          <h1>{totalSales}</h1>
+        </div>
+        <div className="card">
+          <div className="card-inner">
+            <h3>TOTAL REVENUE</h3>
+            <BsFillBarChartFill className="card_icon" />
+          </div>
+          <h1>${totalRevenue}</h1>
+        </div>
       </div>
 
       <div className="charts">
-        <ResponsiveContainer width="100%" height="100%">
+        {/* Bar chart for sales data */}
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart
-            width={500}
-            height={300}
             data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="pv" fill="#8884d8" />
-            <Bar dataKey="uv" fill="#82ca9d" />
+            <Bar dataKey="sales" fill="#8884d8" />
+            <Bar dataKey="revenue" fill="#82ca9d" />
           </BarChart>
         </ResponsiveContainer>
 
-        <ResponsiveContainer width="100%" height="100%">
+        {/* Line chart for sales data */}
+        <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            width={500}
-            height={300}
             data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="sales" stroke="#8884d8" />
+            <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
       </div>

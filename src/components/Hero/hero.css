@@ -14,7 +14,7 @@
   position: absolute;
   top: 15%;
   left: 7%;
-  /* z-index: 10; */
+  transition: 1s ease, transform 1s ease;
 }
 .home_slider_Main .item .info h2 {
   font-size: 90px;

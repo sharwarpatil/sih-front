@@ -15,6 +15,7 @@ import Checkout from "./components/checkout/check.jsx";
 import Detail from "./components/Details/details.jsx";
 import AddReview from "./components/addReview/addReview.jsx";
 import Payment from "./components/payment/payment.jsx";
+import Display from "./components/Dashboard/display.jsx";
 
 import "./App.css";
 
@@ -80,6 +81,15 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <Navbar2 />
+              <Display />
+            </>
+          }
+        />
 
         <Route
           path="/farmerProfile"
@@ -117,6 +127,7 @@ function App() {
             </>
           }
         />
+
         <Route
           path="/details"
           element={

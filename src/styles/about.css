@@ -39,15 +39,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.sunit {
-  background-image: url("../images/SP.jpeg");
-  background-size: cover;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-}
-
 .about-card-text {
   font-size: 1.2rem;
   color: #4a5568;

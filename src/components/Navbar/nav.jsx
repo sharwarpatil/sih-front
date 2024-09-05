@@ -116,6 +116,13 @@ const Navigation = (props) => {
                   <i class="fa-solid fa-circle-info"></i>
                   Contact
                 </Link>
+                {/* <Link
+                  class="nav-link  text-decoration-none px-3 py-1 rounded-4 nav_txt_hov"
+                  to="/display"
+                >
+                  <i class="fa-solid fa-circle-info"></i>
+                  Dashboard
+                </Link> */}
               </Nav>
               <div className="d-flex search-body container">
                 <input
