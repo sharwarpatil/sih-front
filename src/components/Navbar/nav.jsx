@@ -10,6 +10,7 @@ import { FaUserCircle } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import BASE_URL from "../../Server/base_url";
+import AddThroughGPT from "../Bot";
 
 import "./navbar.css";
 

@@ -67,7 +67,7 @@ function Display() {
             <h3>ALERTS</h3>
             <BsFillBellFill className="card_icon" />
           </div>
-          <h1>42</h1>
+          <h1>12</h1>
         </div>
 
         {/* New cards for sales data */}
@@ -83,7 +83,7 @@ function Display() {
             <h3>TOTAL REVENUE</h3>
             <BsFillBarChartFill className="card_icon" />
           </div>
-          <h1>${totalRevenue}</h1>
+          <h1>Rs{totalRevenue}</h1>
         </div>
       </div>
 

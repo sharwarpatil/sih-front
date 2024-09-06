@@ -1,3 +1,165 @@
+// import { useState } from "react";
+// import Swal from "sweetalert2";
+// import { Link, useNavigate } from "react-router-dom";
+// import "./main.css";
+// import Header from "./header";
+// import History from "./order_history";
+// import Order from "./orderReceived";
+// import Listing from "./listing";
+// import Inventory from "./inventory";
+// import Feedback from "./feedback";
+// import Setting from "./setting";
+// import Dashboard from "./dashboard";
+// import { FaHistory } from "react-icons/fa";
+
+// import {
+//   BsCart3,
+//   BsGrid1X2Fill,
+//   BsFillArchiveFill,
+//   BsFillGrid3X3GapFill,
+//   BsPeopleFill,
+//   BsListCheck,
+//   BsMenuButtonWideFill,
+//   BsFillGearFill,
+//   BsGearFill,
+// } from "react-icons/bs";
+// import { FaHome } from "react-icons/fa";
+// import { IoClose } from "react-icons/io5";
+
+// function Main() {
+//   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
+//   const [option, setOption] = useState("order");
+
+//   const OpenSidebar = () => {
+//     setOpenSidebarToggle(!openSidebarToggle);
+//   };
+
+//   const handleOptionClick = (optionName) => {
+//     setOption(optionName);
+//     setOpenSidebarToggle(false); // Close sidebar after selecting an option
+//   };
+
+//   const navigate = useNavigate();
+
+//   //Home
+//   const onHome = () => {
+//     navigate("/");
+//   };
+
+//   //Logout
+//   const onLogOut = () => {
+//     Swal.fire({
+//       title: "Log Out",
+//       text: "You won't be able to revert this!",
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonColor: "#3085d6",
+//       cancelButtonColor: "#d33",
+//       confirmButtonText: "Yes",
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         // Swal.fire({
+//         //   title: "Log Out",
+//         //   text: "",
+//         //   icon: "success",
+//         // });
+//         localStorage.removeItem("token");
+//         localStorage.removeItem("role");
+//         navigate("/");
+//         window.location.reload();
+//       }
+//     });
+//   };
+//   return (
+//     <div className="grid-container">
+//       <Header OpenSidebar={OpenSidebar} />
+//       <aside
+//         id="sidebar"
+//         className={openSidebarToggle ? "sidebar-responsive" : ""}
+//       >
+//         <div className="sidebar-title">
+//           <div className="sidebar-brand" onClick={onHome}>
+//             Cropify
+//           </div>
+//           <span className="icon close_icon" onClick={OpenSidebar}>
+//             <IoClose />
+//           </span>
+//         </div>
+
+//         <ul className="sidebar-list">
+//           <li className="sidebar-list-item" onClick={onHome}>
+//             <FaHome className="icon" /> Home
+//           </li>
+//           {/* <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("dashboard")}
+//           >
+//             <BsGrid1X2Fill className="icon" /> Dashboard
+//           </li> */}
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("order")}
+//           >
+//             <BsPeopleFill className="icon" /> Orders Received
+//           </li>
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("history")}
+//           >
+//             <FaHistory className="icon" /> Order History
+//           </li>
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("listing")}
+//           >
+//             <BsFillGrid3X3GapFill className="icon" /> Product Listing
+//           </li>
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("inventory")}
+//           >
+//             <BsFillArchiveFill className="icon" /> Inventory
+//           </li>
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("feedback")}
+//           >
+//             <BsMenuButtonWideFill className="icon" /> Feedback
+//           </li>
+//           <li
+//             className="sidebar-list-item"
+//             onClick={() => handleOptionClick("setting")}
+//           >
+//             <BsGearFill className="icon" /> Setting
+//           </li>
+//           <li className="sidebar-list-item" onClick={onLogOut}>
+//             <a>
+//               <i className="fa-solid fa-right-from-bracket icon"></i> Log Out
+//             </a>
+//           </li>
+//         </ul>
+//       </aside>
+//       {/* Render component based on the selected option */}
+//       {option === "inventory" ? (
+//         <Inventory />
+//       ) : option === "listing" ? (
+//         <Listing />
+//       ) : option === "order" ? (
+//         <Order />
+//       ) : option === "feedback" ? (
+//         <Feedback />
+//       ) : option === "dashboard" ? (
+//         <Dashboard />
+//       ) : option === "history" ? (
+//         <History />
+//       ) : (
+//         <Setting />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Main;
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
@@ -58,11 +220,6 @@ function Main() {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Swal.fire({
-        //   title: "Log Out",
-        //   text: "",
-        //   icon: "success",
-        // });
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         navigate("/");
@@ -70,75 +227,85 @@ function Main() {
       }
     });
   };
+
   return (
     <div className="grid-container">
       <Header OpenSidebar={OpenSidebar} />
       <aside
         id="sidebar"
-        className={openSidebarToggle ? "sidebar-responsive" : ""}
+        className={`${
+          openSidebarToggle ? "sidebar-responsive" : ""
+        } bg-gray-100 p-4`}
       >
-        <div className="sidebar-title">
-          <div className="sidebar-brand" onClick={onHome}>
+        <div className="sidebar-title flex justify-between items-center rounded-2xl">
+          <div
+            className="sidebar-brand cursor-pointer text-2xl"
+            onClick={onHome}
+          >
             Cropify
           </div>
-          <span className="icon close_icon" onClick={OpenSidebar}>
+          <span
+            className="icon close_icon cursor-pointer"
+            onClick={OpenSidebar}
+          >
             <IoClose />
           </span>
         </div>
 
-        <ul className="sidebar-list">
-          <li className="sidebar-list-item" onClick={onHome}>
-            <FaHome className="icon" /> Home
-          </li>
-          {/* <li
-            className="sidebar-list-item"
-            onClick={() => handleOptionClick("dashboard")}
-          >
-            <BsGrid1X2Fill className="icon" /> Dashboard
-          </li> */}
+        <ul className="sidebar-list mt-4">
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
+            onClick={onHome}
+          >
+            <FaHome className="icon" /> <span>Home</span>
+          </li>
+          <li
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("order")}
           >
-            <BsPeopleFill className="icon" /> Orders Received
+            <BsPeopleFill className="icon" /> <span>Orders Received</span>
           </li>
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("history")}
           >
-            <FaHistory className="icon" /> Order History
+            <FaHistory className="icon" /> <span>Order History</span>
           </li>
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("listing")}
           >
-            <BsFillGrid3X3GapFill className="icon" /> Product Listing
+            <BsFillGrid3X3GapFill className="icon" />{" "}
+            <span>Product Listing</span>
           </li>
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("inventory")}
           >
-            <BsFillArchiveFill className="icon" /> Inventory
+            <BsFillArchiveFill className="icon" /> <span>Inventory</span>
           </li>
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("feedback")}
           >
-            <BsMenuButtonWideFill className="icon" /> Feedback
+            <BsMenuButtonWideFill className="icon" /> <span>Feedback</span>
           </li>
           <li
-            className="sidebar-list-item"
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
             onClick={() => handleOptionClick("setting")}
           >
-            <BsGearFill className="icon" /> Setting
+            <BsGearFill className="icon" /> <span>Setting</span>
           </li>
-          <li className="sidebar-list-item" onClick={onLogOut}>
-            <a>
-              <i className="fa-solid fa-right-from-bracket icon"></i> Log Out
-            </a>
+          <li
+            className="sidebar-list-item flex items-center space-x-2 p-2 cursor-pointer"
+            onClick={onLogOut}
+          >
+            <i className="fa-solid fa-right-from-bracket icon"></i>{" "}
+            <span>Log Out</span>
           </li>
         </ul>
       </aside>
+
       {/* Render component based on the selected option */}
       {option === "inventory" ? (
         <Inventory />

@@ -16,6 +16,7 @@ import Detail from "./components/Details/details.jsx";
 import AddReview from "./components/addReview/addReview.jsx";
 import Payment from "./components/payment/payment.jsx";
 import Display from "./components/Dashboard/display.jsx";
+import AddThroughGPT from "./components/Bot.jsx";
 
 import "./App.css";
 
@@ -87,6 +88,15 @@ function App() {
             <>
               <Navbar2 />
               <Display />
+            </>
+          }
+        />
+        <Route
+          path="/bot"
+          element={
+            <>
+              <Navbar2 />
+              <AddThroughGPT />
             </>
           }
         />

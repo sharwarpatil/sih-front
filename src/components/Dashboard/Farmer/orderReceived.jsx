@@ -6,28 +6,15 @@ import Status from "./order_status.jsx";
 import BASE_URL from "../../../Server/base_url";
 
 const Order = () => {
-  let token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/orderReceived/show`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        });
-        const json = await response.json();
-        setData(json.orders);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
 
+  useEffect(() => {
     getOrders();
   }, []);
+
+  // Function to fetch orders
   const getOrders = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/orderReceived/show`, {
@@ -40,20 +27,69 @@ const Order = () => {
       const json = await response.json();
       setData(json.orders);
     } catch (error) {
-      console.log(error.message);
+      console.log("Error fetching orders:", error.message);
     }
   };
 
-  //Cancel Order
+  // Function to cancel an order
+  const cancelOrder = async (orderId) => {
+    try {
+      // Send a DELETE request to the server with the order ID in the URL
+      const response = await fetch(
+        `${BASE_URL}/api/orderReceived/cancel/${orderId}`,
+        {
+          method: "DELETE", // Use DELETE method
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token, // Add the auth token for authorization
+          },
+        }
+      );
 
-  const onInfo = (index, status) => {
-    console.log(status);
-    const text =
-      `<div>Name - ${data[index].buyer_name}</div>` +
-      `<div>State - ${data[index].buyer_address.state}</div>` +
-      `<div>City - ${data[index].buyer_address.city}</div>` +
-      `<div>Pin - ${data[index].buyer_address.pin}</div>` +
-      `<div>PH no. - ${data[index].buyer_ph}</div>`;
+      // Check for HTTP response status
+      if (!response.ok) {
+        // If the response status is not in the range of 200-299
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parse the response
+      const json = await response.json();
+
+      // Check if the cancellation was successful
+      if (json.success) {
+        Swal.fire(
+          "Order Canceled",
+          "The order has been canceled successfully",
+          "success"
+        );
+        getOrders(); // Refresh the orders after cancellation
+      } else {
+        Swal.fire(
+          "Error",
+          json.message || "Failed to cancel the order. Please try again.",
+          "error"
+        );
+      }
+    } catch (error) {
+      console.error("Error canceling the order:", error.message);
+      Swal.fire(
+        "Error",
+        "An error occurred while canceling the order. Please try again.",
+        "error"
+      );
+    }
+  };
+
+  // Show buyer info in a popup
+  const onInfo = (index) => {
+    const buyer = data[index];
+    const text = `
+      <div>Name - ${buyer.buyer_name}</div>
+      <div>State - ${buyer.buyer_address.state}</div>
+      <div>City - ${buyer.buyer_address.city}</div>
+      <div>Pin - ${buyer.buyer_address.pin}</div>
+      <div>PH no. - ${buyer.buyer_ph}</div>
+    `;
     Swal.fire({
       title: "Buyer Details",
       html: text,
@@ -87,11 +123,12 @@ const Order = () => {
                         <th>Product</th>
                         <th className="row_center">Buyer</th>
                         <th className="row_center">Status</th>
+                        <th className="row_center">Actions</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {data.length !== 0 &&
+                      {data.length > 0 &&
                         data.map(
                           (item, index) =>
                             item.status !== "delivered" && (
@@ -105,7 +142,7 @@ const Order = () => {
                                             item.image + "?im=Resize=(100,100)"
                                           }
                                           className="w-100"
-                                          alt={item.productName} // Add alt attribute for accessibility
+                                          alt={item.productName}
                                         />
                                       </Link>
                                     </div>
@@ -115,8 +152,15 @@ const Order = () => {
                                         <h4>{item.productName}</h4>
                                       </Link>
                                       <h4 className="myOrder_info myOrder_info_price">
-                                        RS. {item.price}
+                                        Original Price: RS. {item.price}
                                       </h4>
+                                      {item.negotiation && (
+                                        <h4 className="myOrder_info myOrder_info_price text-red-500">
+                                          Negotiated Price: RS.{" "}
+                                          {item.negotiation}
+                                        </h4>
+                                      )}
+
                                       {item.quantity < 1 ? (
                                         <h4 className="myOrder_info">
                                           Weight: {item.quantity * 1000}GM
@@ -134,9 +178,7 @@ const Order = () => {
                                   <button
                                     type="button"
                                     className="btn btn-outline-info"
-                                    onClick={() => {
-                                      onInfo(index, item);
-                                    }}
+                                    onClick={() => onInfo(index)}
                                   >
                                     Info
                                   </button>
@@ -147,6 +189,16 @@ const Order = () => {
                                   data={item}
                                   getOrders={getOrders}
                                 />
+
+                                <td align="center">
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => cancelOrder(item.id)}
+                                  >
+                                    Cancel
+                                  </button>
+                                </td>
                               </tr>
                             )
                         )}

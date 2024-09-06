@@ -19,4 +19,11 @@
 /* Resposive For Mobile */
 
 @media (max-width: 768px) {
+  .home_body {
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
 }

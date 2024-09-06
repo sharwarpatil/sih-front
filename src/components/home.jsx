@@ -466,6 +466,134 @@
 // };
 
 // export default Home;
+// import React, { useEffect, useState } from "react";
+// import "../styles/home.css";
+// import { useNavigate } from "react-router-dom";
+// import Hero from "./Hero/hero";
+// import Product from "./product/product";
+// import Top from "./TopBar/top";
+// import Nav from "./Navbar/nav";
+// import BASE_URL from "../Server/base_url";
+
+// const Home = () => {
+//   const navigate = useNavigate();
+//   let token = localStorage.getItem("token");
+
+//   const [top, setTop] = useState([]);
+//   const [vegetable, setVegetable] = useState([]);
+//   const [fruit, setFruit] = useState([]);
+//   const [flours, setFlours] = useState([]);
+//   const [masala, setMasala] = useState([]);
+//   const [rice, setRice] = useState([]);
+//   const [dal, setDal] = useState([]);
+
+//   useEffect(() => {
+//     if (!token) {
+//       navigate("/signup");
+//       return;
+//     }
+
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(`${BASE_URL}/api/product/view`, {
+//           method: "GET",
+//           headers: {
+//             "Content-Type": "application/json",
+//             "auth-token": token,
+//           },
+//         });
+
+//         if (!response.ok) {
+//           throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+
+//         const json = await response.json();
+
+//         // Filtering products by categories
+//         const top = json.filter((item) => item.rating >= 4);
+//         const veg = json.filter((item) => item.cat === "vegetable");
+//         const fruit = json.filter((item) => item.cat === "fruit");
+//         const masala = json.filter((item) => item.cat === "masala");
+//         const rice = json.filter((item) => item.cat === "rice");
+//         const dal = json.filter((item) => item.cat === "dal");
+//         const flours = json.filter((item) => item.cat === "flours");
+
+//         // Setting states
+//         setTop(top);
+//         setVegetable(veg);
+//         setFruit(fruit);
+//         setMasala(masala);
+//         setRice(rice);
+//         setDal(dal);
+//         setFlours(flours);
+//       } catch (error) {
+//         console.error("Error fetching products:", error.message);
+//       }
+//     };
+
+//     fetchData(); // Fetch data when component mounts
+//   }, [token]); // Run useEffect when token changes
+
+//   const [searchData, setSearchData] = useState([]);
+
+//   return (
+//     <>
+//       <Nav setSearchData={setSearchData} />
+//       {searchData.length !== 0 && (
+//         <>
+//           <Top name={"Search Items"} />
+//           <Product data={searchData} />
+//         </>
+//       )}
+//       <Hero />
+
+//       {top.length > 0 && (
+//         <>
+//           <Top name={"Top Products"} />
+//           <Product data={top} />
+//         </>
+//       )}
+//       {vegetable.length > 0 && (
+//         <>
+//           <Top name={"Vegetables"} />
+//           <Product data={vegetable} />
+//         </>
+//       )}
+//       {fruit.length > 0 && (
+//         <>
+//           <Top name={"Fruits"} />
+//           <Product data={fruit} />
+//         </>
+//       )}
+//       {flours.length > 0 && (
+//         <>
+//           <Top name={"Flours"} />
+//           <Product data={flours} />
+//         </>
+//       )}
+//       {rice.length > 0 && (
+//         <>
+//           <Top name={"Rice"} />
+//           <Product data={rice} />
+//         </>
+//       )}
+//       {dal.length > 0 && (
+//         <>
+//           <Top name={"Dal"} />
+//           <Product data={dal} />
+//         </>
+//       )}
+//       {masala.length > 0 && (
+//         <>
+//           <Top name={"Masalas"} />
+//           <Product data={masala} />
+//         </>
+//       )}
+//     </>
+//   );
+// };
+
+// export default Home;
 import React, { useEffect, useState } from "react";
 import "../styles/home.css";
 import { useNavigate } from "react-router-dom";
@@ -474,10 +602,13 @@ import Product from "./product/product";
 import Top from "./TopBar/top";
 import Nav from "./Navbar/nav";
 import BASE_URL from "../Server/base_url";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const navigate = useNavigate();
   let token = localStorage.getItem("token");
+
+  const { t, i18n } = useTranslation(); // Use the translation hook
 
   const [top, setTop] = useState([]);
   const [vegetable, setVegetable] = useState([]);
@@ -486,6 +617,7 @@ const Home = () => {
   const [masala, setMasala] = useState([]);
   const [rice, setRice] = useState([]);
   const [dal, setDal] = useState([]);
+  const [searchData, setSearchData] = useState([]);
 
   useEffect(() => {
     if (!token) {
@@ -534,14 +666,16 @@ const Home = () => {
     fetchData(); // Fetch data when component mounts
   }, [token]); // Run useEffect when token changes
 
-  const [searchData, setSearchData] = useState([]);
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <>
       <Nav setSearchData={setSearchData} />
       {searchData.length !== 0 && (
         <>
-          <Top name={"Search Items"} />
+          <Top name={t("searchItems")} />
           <Product data={searchData} />
         </>
       )}
@@ -549,46 +683,50 @@ const Home = () => {
 
       {top.length > 0 && (
         <>
-          <Top name={"Top Products"} />
+          <Top name={t("topProducts")} />
           <Product data={top} />
         </>
       )}
       {vegetable.length > 0 && (
         <>
-          <Top name={"Vegetables"} />
+          <Top name={t("vegetables")} />
           <Product data={vegetable} />
         </>
       )}
       {fruit.length > 0 && (
         <>
-          <Top name={"Fruits"} />
+          <Top name={t("fruits")} />
           <Product data={fruit} />
         </>
       )}
       {flours.length > 0 && (
         <>
-          <Top name={"Flours"} />
+          <Top name={t("flours")} />
           <Product data={flours} />
         </>
       )}
       {rice.length > 0 && (
         <>
-          <Top name={"Rice"} />
+          <Top name={t("rice")} />
           <Product data={rice} />
         </>
       )}
       {dal.length > 0 && (
         <>
-          <Top name={"Dal"} />
+          <Top name={t("dal")} />
           <Product data={dal} />
         </>
       )}
       {masala.length > 0 && (
         <>
-          <Top name={"Masalas"} />
+          <Top name={t("masalas")} />
           <Product data={masala} />
         </>
       )}
+      <div>
+        <button onClick={() => changeLanguage("en")}>English</button>
+        <button onClick={() => changeLanguage("hi")}>हिन्दी</button>
+      </div>
     </>
   );
 };

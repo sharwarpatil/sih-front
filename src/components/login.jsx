@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles/login.css";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import BASE_URL from "../Server/base_url";
+import { useTranslation } from "react-i18next";
 
 const Login = ({ loadUser, onRouteChange }) => {
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
 
+  const { t, i18n } = useTranslation(); // Use the 't' function for translations
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   const onEmailChange = (event) => {
     setSignInEmail(event.target.value);
   };
+
   const onPasswordChange = (event) => {
     setSignInPassword(event.target.value);
   };
@@ -20,6 +27,7 @@ const Login = ({ loadUser, onRouteChange }) => {
   const handleClick = () => {
     navigate("/");
   };
+
   const onSubmitLogIn = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -36,7 +44,7 @@ const Login = ({ loadUser, onRouteChange }) => {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "Invalid Credentials",
+          title: t("invalidCredentials"), // Use translation here
           text: "",
         });
       }
@@ -47,12 +55,12 @@ const Login = ({ loadUser, onRouteChange }) => {
 
   return (
     <>
-      <div className="container  whole-body-login">
+      <div className="container whole-body-login">
         <div className="form-container">
-          <p className="title">Login</p>
+          <p className="title">{t("loginTitle")}</p>
 
           <div className="input-group">
-            <label for="username">Email</label>
+            <label htmlFor="email">{t("email")}</label>
             <input
               type="email"
               name="Email"
@@ -61,7 +69,7 @@ const Login = ({ loadUser, onRouteChange }) => {
             />
           </div>
           <div className="input-group">
-            <label for="password">Password</label>
+            <label htmlFor="password">{t("password")}</label>
             <input
               type="password"
               name="password"
@@ -72,21 +80,24 @@ const Login = ({ loadUser, onRouteChange }) => {
 
             <div className="forgot">
               <a rel="noopener noreferrer" href="#">
-                Forgot Password ?
+                {t("forgotPassword")}
               </a>
             </div>
           </div>
           <button className="sign" onClick={onSubmitLogIn}>
-            Log in
+            {t("logIn")}
           </button>
 
           <p className="signup">
-            Don't have an account?
-            <Link rel="noopener noreferrer" to="/signup" class="">
-              {" "}
-              Sign up
+            {t("noAccount")}
+            <Link rel="noopener noreferrer" to="/signup">
+              {t("signUp")}
             </Link>
           </p>
+        </div>
+        <div>
+          <button onClick={() => changeLanguage("en")}>English</button>
+          <button onClick={() => changeLanguage("hi")}>हिन्दी</button>
         </div>
       </div>
     </>
